@@ -2,6 +2,7 @@ class LoginController {
   static onSubmit(event) {
     event.preventDefault();
     LoginController.sendLogin();
+    document.body.classList.add("loading");
   }
 
   static async loginFailedAlert(response) {
@@ -17,12 +18,18 @@ class LoginController {
       const response = await ApiModel.sendLogin(username, password);
 
       if (!response.ok) {
-        return LoginController.loginFailedAlert(response);
+        document.body.classList.remove("loading");
+        await LoginController.loginFailedAlert(response);
+        return;
       }
 
-      console.log("Login successful");
+      LoginController.loginSuccessfully();
     } catch (error) {
       console.error(error.message);
     }
+  }
+
+  static loginSuccessfully() {
+    window.location.href = "/view/products.php";
   }
 }
