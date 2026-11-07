@@ -111,14 +111,14 @@ class ProductsController {
                 const dialog = document.querySelector("#create-or-update-product-dialog");
                 dialog.querySelector("h2").textContent = "Produkt bearbeiten";
                 dialog.showModal();
-            } else if (response.status === 401) {
+            } else if (productResponse.status === 401 || categoriesResponse.status === 401) {
                 alert("Bitte erneut anmelden");
                 window.location.href = "/index.php";
             } else {
-                console.error("Could not create or update product: ", response.status);
+                console.error("Could not load product or categories:", productResponse.status, categoriesResponse.status);
             }
         } catch (error) {
-            console.error("Could not load categories: ", error.message);
+            console.error("Could not load product or categories:", error.message);
         }
     }
 
@@ -161,11 +161,11 @@ class ProductsController {
     static async createOrUpdateProduct() {
         const sku = document.querySelector("#product-sku").value;
         const name = document.querySelector("#product-name").value;
-        const id_category = document.querySelector("#product-category").value;
+        const id_category = Number(document.querySelector("#product-category").value);
         const image = document.querySelector("#product-image").value;
         const description = document.querySelector("#product-description").value;
-        const price = document.querySelector("#product-price").value;
-        const stock = document.querySelector("#product-stock").value;
+        const price = Number(document.querySelector("#product-price").value);
+        const stock = Number(document.querySelector("#product-stock").value);
         // 1 = active / 0 = deactive
         const active = document.querySelector("#product-active").checked ? 1 : 0;
 
