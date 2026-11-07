@@ -74,7 +74,7 @@ class ApiModel {
         });
     }
 
-    static getProduct(sku, active, id_category, name, image, description, price, stock) {
+    static createOrUpdateProduct(sku, active, id_category, name, image, description, price, stock) {
         return fetch("https://campus.csbe.ch/uek294/api/v1/product/" + encodeURIComponent(sku), {
             method: "PUT",
             credentials: "include",
