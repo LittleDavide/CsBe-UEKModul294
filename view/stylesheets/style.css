@@ -9,3 +9,7 @@ body {
 body.loading {
   cursor: progress;
 }
+
+.product-table {
+    font-size: 12px;
+}
