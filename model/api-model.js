@@ -3,9 +3,6 @@ class ApiModel {
         return fetch("https://campus.csbe.ch/uek294/api/v1/authenticate", {
             method: "POST",
             credentials: "include",
-            // headers: {
-            //   // "Content-Type": "application/json"
-            // },
             body: JSON.stringify({
                 username: username,
                 password: password
@@ -14,7 +11,7 @@ class ApiModel {
     }
 
     static sendLogout() {
-        return fetch("https://campus.csbe.ch./uek294/api/v1/unauthenticate". {
+        return fetch("https://campus.csbe.ch./uek294/api/v1/unauthenticate", {
             method: "POST",
             credentials: "include"
         });

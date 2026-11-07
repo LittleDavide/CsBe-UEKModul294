@@ -1,20 +1,20 @@
 class LoginController {
-  static handleSubmit(event) {
+  static onSubmit(event) {
     event.preventDefault();
     LoginController.sendLogin();
   }
 
   static async loginFailedAlert(response) {
-    let errorData = await response.json();
+    const errorData = await response.json();
     alert(response.status + ": " + errorData.error_message);
   }
 
   static async sendLogin() {
-    let username = document.querySelector("#username").value;
-    let password = document.querySelector("#password").value;
+    const username = document.querySelector("#username").value;
+    const password = document.querySelector("#password").value;
 
     try {
-      let response = await ApiModel.sendLogin(username, password);
+      const response = await ApiModel.sendLogin(username, password);
 
       if (!response.ok) {
         return LoginController.loginFailedAlert(response);
@@ -26,7 +26,3 @@ class LoginController {
     }
   }
 }
-
-document
-  .querySelector("#login-form")
-  .addEventListener("submit", LoginController.handleSubmit);
