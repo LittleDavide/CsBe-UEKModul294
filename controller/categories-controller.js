@@ -17,7 +17,7 @@ class CategoriesController {
         const categoryId = new URLSearchParams(window.location.search).get("id");
 
         if (categoryId) {
-            CategoriesController.openUpdateProductDialog(categoryId);
+            CategoriesController.openUpdateCategoryDialog(categoryId);
         }
     }
 
