@@ -1,8 +1,15 @@
+/**
+ * Steuert die Kategorienliste und die Dialoge zum Erstellen und Bearbeiten.
+ */
 class CategoriesController {
+    /**
+     * Wählt anhand der Kategorie-ID zwischen Erstellen und Aktualisieren.
+     * @param {SubmitEvent} event Das Absendeereignis des Kategorieformulars.
+     */
     static onSubmit(event) {
         event.preventDefault();
 
-        // rausholen der category id um zu referenzieren obs ein update oder create ist
+        // Eine leere ID kennzeichnet eine neue Kategorie.
         const form = event.currentTarget;
         const categoryId = form.elements.category_id.value;
 
@@ -13,6 +20,9 @@ class CategoriesController {
         }
     }
 
+    /**
+     * Öffnet die Kategorie, deren ID in der URL steht.
+     */
     static getProductFromPermaLink() {
         const categoryId = new URLSearchParams(window.location.search).get("id");
 
@@ -21,6 +31,9 @@ class CategoriesController {
         }
     }
 
+    /**
+     * Lädt alle Kategorien von der API und aktualisiert die Tabelle.
+     */
     static async getAllCategories() {
         try {
             let response = await ApiModel.getCategories();
@@ -39,6 +52,10 @@ class CategoriesController {
         }
     }
 
+    /**
+     * Erstellt die Tabellenzeilen mit Aktionen und Permalinks.
+     * @param {object[]} categories Die anzuzeigenden Kategorien.
+     */
     static loadTable(categories) {
         const categoryList = document.querySelector("#category-list");
 
@@ -52,7 +69,7 @@ class CategoriesController {
             row.insertCell().textContent = category.name;
             row.insertCell().textContent = Number(category.active) === 1 ? "Ja" : "Nein";
 
-            // Bündelt die Aktionen für das jeweilige Produkt in einer Zelle.
+            // Bündelt die Aktionen für die jeweilige Kategorie in einer Zelle.
             const actionCell = row.insertCell();
 
             const editButton = document.createElement("button");
@@ -60,7 +77,7 @@ class CategoriesController {
             editButton.textContent = "Bearbeiten";
             editButton.onclick = () => CategoriesController.openUpdateCategoryDialog(category.category_id);
 
-            // Der Löschbutton übergibt die SKU aus dieser Zeile.
+            // Der Löschbutton übergibt die Kategorie-ID aus dieser Zeile.
             const deleteButton = document.createElement("button");
             deleteButton.type = "button";
             deleteButton.textContent = "Löschen";
@@ -68,7 +85,7 @@ class CategoriesController {
 
             actionCell.append(editButton, " ", deleteButton);
 
-            // Die SKU in der URL macht das Produkt direkt aufrufbar.
+            // Die Kategorie-ID in der URL macht den Datensatz direkt aufrufbar.
             const categoryLink = document.createElement("a");
             categoryLink.textContent = "Produkt Detail öffnen";
             categoryLink.href = "/view/categories.php?id=" + encodeURIComponent(category.category_id);
@@ -84,17 +101,23 @@ class CategoriesController {
         }
     }
 
+    /**
+     * Setzt das Formular zurück und öffnet es zum Erstellen einer Kategorie.
+     */
     static openCreateCategoryDialog() {
-        // Lädt die Kategorien vor dem Öffnen des Dialogs.
         const form = document.querySelector("#category-form");
         const dialog = document.querySelector("#create-or-update-category-dialog");
 
-        // Setzt Formular und SKU-Feld nach einer Bearbeitung zurück.
+        // Leert auch die ID, damit der nächste Submit eine Kategorie erstellt.
         form.reset();
         dialog.querySelector("h2").textContent = "Category erstellen";
         dialog.showModal();
     }
 
+    /**
+     * Lädt eine Kategorie und setzt ihre Werte ins Bearbeitungsformular.
+     * @param {number|string} category_id Die ID der Kategorie.
+     */
     static async openUpdateCategoryDialog(category_id) {
         try {
             const response = await ApiModel.getCategory(category_id);
@@ -110,7 +133,7 @@ class CategoriesController {
             } else if (response.ok) {
                 const category = await response.json();
 
-                // Greift über die Feldnamen auf das gemeinsame Produktformular zu.
+                // Greift über die Feldnamen auf das gemeinsame Kategorieformular zu.
                 const fields = document.querySelector("#category-form").elements;
 
                 fields.category_id.value = category.category_id;
@@ -130,6 +153,9 @@ class CategoriesController {
         }
     }
 
+    /**
+     * Speichert die Änderungen und aktualisiert danach die Kategorienliste.
+     */
     static async updateCategory() {
         const category_id = Number(document.querySelector("#category-id").value);
         const name = document.querySelector("#category-name").value;
@@ -161,6 +187,9 @@ class CategoriesController {
         }
     }
 
+    /**
+     * Erstellt eine Kategorie mit den Formularwerten und lädt die Liste neu.
+     */
     static async createCategory() {
         const name = document.querySelector("#category-name").value;
         // Sendet den Zustand der Checkbox als Zahl an die API.
@@ -188,6 +217,10 @@ class CategoriesController {
         }
     }
 
+    /**
+     * Fragt vor dem Löschen nach und lädt die Liste nach Erfolg neu.
+     * @param {number|string} category_id Die ID der zu löschenden Kategorie.
+     */
     static async handleDelete(category_id) {
         if (confirm("Produkt wirklich löschen? " + category_id)) {
             try {

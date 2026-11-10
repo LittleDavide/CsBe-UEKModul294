@@ -13,14 +13,14 @@
             <th scope="col">Aktionen</th>
         </tr>
     </thead>
-    <!-- Der Produkt-Controller füllt die Tabellenzeilen mit den geladenen Produkten. -->
+    <!-- Der Kategorie-Controller ergänzt die geladenen Kategorien und ihre Aktionen. -->
     <tbody id="category-list"></tbody>
 </table>
 <br>
 <button id="create-category-button" type="button" onclick="CategoriesController.openCreateCategoryDialog()">Neuen
     Produkt erstellen</button>
 
-<!-- Gemeinsames Formular für neue und bestehende Produkte. -->
+<!-- Gemeinsamer Dialog zum Erstellen und Bearbeiten von Kategorien. -->
 <dialog id="create-or-update-category-dialog">
     <h2>Produkt erstellen</h2>
 
