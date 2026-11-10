@@ -26,6 +26,7 @@ class ProductsController {
      * Lädt die Produkte von der API und aktualisiert die Tabelle.
      */
     static async getAllProducts() {
+        LoadingCursor.start();
         try {
             let response = await ApiModel.getProducts();
 
@@ -40,6 +41,8 @@ class ProductsController {
             }
         } catch (error) {
             console.error("Could not load products: ", error.message);
+        } finally {
+            LoadingCursor.stop();
         }
     }
 
@@ -101,6 +104,7 @@ class ProductsController {
      */
     static async handleDelete(sku) {
         if (confirm("Produkt wirklich löschen? " + sku)) {
+            LoadingCursor.start();
             try {
                 const response = await ApiModel.deleteProduct(sku);
 
@@ -117,6 +121,8 @@ class ProductsController {
                 }
             } catch (error) {
                 console.error("Could not load products: ", error.message);
+            } finally {
+                LoadingCursor.stop();
             }
         }
     }
@@ -126,6 +132,7 @@ class ProductsController {
      * @param {string} sku Die Artikelnummer des Produkts.
      */
     static async openUpdateProductDialog(sku) {
+        LoadingCursor.start();
         try {
             const productResponse = await ApiModel.getProduct(sku);
             const categoriesResponse = await ApiModel.getCategories();
@@ -172,6 +179,8 @@ class ProductsController {
             }
         } catch (error) {
             console.error("Could not load product or categories:", error.message);
+        } finally {
+            LoadingCursor.stop();
         }
     }
 
@@ -181,6 +190,7 @@ class ProductsController {
      */
     static async openCreateProductDialog() {
         // Lädt die Kategorien vor dem Öffnen des Dialogs.
+        LoadingCursor.start();
         try {
             const response = await ApiModel.getCategories();
 
@@ -211,6 +221,8 @@ class ProductsController {
             }
         } catch (error) {
             console.error("Could not load categories: ", error.message);
+        } finally {
+            LoadingCursor.stop();
         }
     }
 
@@ -228,6 +240,7 @@ class ProductsController {
         // Sendet den Zustand der Checkbox als Zahl an die API.
         const active = document.querySelector("#product-active").checked ? 1 : 0;
 
+        LoadingCursor.start();
         try {
             let response = await ApiModel.createOrUpdateProduct(sku, active, id_category, name, image, description, price, stock);
 
@@ -252,6 +265,8 @@ class ProductsController {
             }
         } catch (error) {
             console.error("Could not load products: ", error.message);
+        } finally {
+            LoadingCursor.stop();
         }
     }
 }

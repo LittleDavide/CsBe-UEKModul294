@@ -9,7 +9,6 @@ class LoginController {
   static onSubmit(event) {
     event.preventDefault();
     LoginController.sendLogin();
-    document.body.classList.add("loading");
   }
 
   /**
@@ -28,11 +27,11 @@ class LoginController {
     const username = document.querySelector("#username").value;
     const password = document.querySelector("#password").value;
 
+    LoadingCursor.start();
     try {
       const response = await ApiModel.sendLogin(username, password);
 
       if (!response.ok) {
-        document.body.classList.remove("loading");
         await LoginController.loginFailedAlert(response);
         return;
       }
@@ -40,6 +39,8 @@ class LoginController {
       LoginController.loginSuccessfully();
     } catch (error) {
       console.error(error.message);
+    } finally {
+      LoadingCursor.stop();
     }
   }
 
@@ -54,6 +55,7 @@ class LoginController {
    * Ruft die Abmeldung bei der API auf und öffnet danach die Anmeldung.
    */
   static async logout() {
+    LoadingCursor.start();
     try {
       const response = await ApiModel.sendLogout();
 
@@ -63,6 +65,7 @@ class LoginController {
     } catch (error) {
       console.error("Abmeldung fehlgeschlagen:", error.message);
     } finally {
+      LoadingCursor.stop();
       window.location.href = "/index.php";
     }
   }

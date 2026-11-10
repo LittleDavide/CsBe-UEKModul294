@@ -1,8 +1,8 @@
-<?php $page_title = "products"; ?>
+<?php $page_title = "Kategorien"; ?>
 <?php $page_controller_path = "/controller/categories-controller.js"; ?>
 <?php require "blocks/header.php"; ?>
 
-<h1>Categories</h1>
+<h1>Kategorien</h1>
 
 <button type="button" onclick="LoginController.logout()">Abmelden</button>
 <button type="button" onclick="window.location.href = '/view/products.php'">Zurück zu Produkten</button>
@@ -20,12 +20,11 @@
     <tbody id="category-list"></tbody>
 </table>
 <br>
-<button id="create-category-button" type="button" onclick="CategoriesController.openCreateCategoryDialog()">Neuen
-    Produkt erstellen</button>
+<button id="create-category-button" type="button" onclick="CategoriesController.openCreateCategoryDialog()">Neue Kategorie erstellen</button>
 
 <!-- Gemeinsamer Dialog zum Erstellen und Bearbeiten von Kategorien. -->
 <dialog id="create-or-update-category-dialog">
-    <h2>Produkt erstellen</h2>
+    <h2>Kategorie erstellen</h2>
 
     <form id="category-form" onsubmit="CategoriesController.onSubmit(event)">
         <label for="category-id">Kategorie-ID</label><br>

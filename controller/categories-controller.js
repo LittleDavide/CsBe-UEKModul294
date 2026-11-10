@@ -35,6 +35,7 @@ class CategoriesController {
      * Lädt alle Kategorien von der API und aktualisiert die Tabelle.
      */
     static async getAllCategories() {
+        LoadingCursor.start();
         try {
             let response = await ApiModel.getCategories();
 
@@ -49,6 +50,8 @@ class CategoriesController {
             }
         } catch (error) {
             console.error("Could not load products: ", error.message);
+        } finally {
+            LoadingCursor.stop();
         }
     }
 
@@ -87,7 +90,7 @@ class CategoriesController {
 
             // Die Kategorie-ID in der URL macht den Datensatz direkt aufrufbar.
             const categoryLink = document.createElement("a");
-            categoryLink.textContent = "Produkt Detail öffnen";
+            categoryLink.textContent = "Kategoriedetails öffnen";
             categoryLink.href = "/view/categories.php?id=" + encodeURIComponent(category.category_id);
 
             // Aktualisiert die Adressleiste, ohne die Seite neu zu laden.
@@ -110,7 +113,7 @@ class CategoriesController {
 
         // Leert auch die ID, damit der nächste Submit eine Kategorie erstellt.
         form.reset();
-        dialog.querySelector("h2").textContent = "Category erstellen";
+        dialog.querySelector("h2").textContent = "Kategorie erstellen";
         dialog.showModal();
     }
 
@@ -119,6 +122,7 @@ class CategoriesController {
      * @param {number|string} category_id Die ID der Kategorie.
      */
     static async openUpdateCategoryDialog(category_id) {
+        LoadingCursor.start();
         try {
             const response = await ApiModel.getCategory(category_id);
 
@@ -143,13 +147,15 @@ class CategoriesController {
                 fields.active.checked = Number(category.active) === 1;
 
                 const dialog = document.querySelector("#create-or-update-category-dialog");
-                dialog.querySelector("h2").textContent = "Produkt bearbeiten";
+                dialog.querySelector("h2").textContent = "Kategorie bearbeiten";
                 dialog.showModal();
             } else {
                 console.error("Could not load product or categories:", response.status);
             }
         } catch (error) {
             console.error("Could not load product or categories:", error.message);
+        } finally {
+            LoadingCursor.stop();
         }
     }
 
@@ -162,6 +168,7 @@ class CategoriesController {
         // Sendet den Zustand der Checkbox als Zahl an die API.
         const active = document.querySelector("#category-active").checked ? 1 : 0;
 
+        LoadingCursor.start();
         try {
             let response = await ApiModel.updateCategory(category_id, active, name);
 
@@ -184,6 +191,8 @@ class CategoriesController {
             }
         } catch (error) {
             console.error("Could not load products: ", error.message);
+        } finally {
+            LoadingCursor.stop();
         }
     }
 
@@ -195,6 +204,7 @@ class CategoriesController {
         // Sendet den Zustand der Checkbox als Zahl an die API.
         const active = document.querySelector("#category-active").checked ? 1 : 0;
 
+        LoadingCursor.start();
         try {
             let response = await ApiModel.createCategory(active, name);
 
@@ -214,6 +224,8 @@ class CategoriesController {
             }
         } catch (error) {
             console.error("Could not load products: ", error.message);
+        } finally {
+            LoadingCursor.stop();
         }
     }
 
@@ -222,7 +234,8 @@ class CategoriesController {
      * @param {number|string} category_id Die ID der zu löschenden Kategorie.
      */
     static async handleDelete(category_id) {
-        if (confirm("Produkt wirklich löschen? " + category_id)) {
+        if (confirm("Kategorie wirklich löschen? " + category_id)) {
+            LoadingCursor.start();
             try {
                 const response = await ApiModel.deleteCategory(category_id);
 
@@ -239,6 +252,8 @@ class CategoriesController {
                 }
             } catch (error) {
                 console.error("Could not load products: ", error.message);
+            } finally {
+                LoadingCursor.stop();
             }
         }
     }

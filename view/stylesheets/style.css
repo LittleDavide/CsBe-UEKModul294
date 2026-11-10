@@ -6,8 +6,9 @@ body {
   color: black;
 }
 
-/* Zeigt während der Anmeldung einen Fortschrittscursor. */
-body.loading {
+/* Zeigt während laufender Anfragen einen Fortschrittscursor. */
+body.loading,
+body.loading * {
   cursor: progress;
 }
 

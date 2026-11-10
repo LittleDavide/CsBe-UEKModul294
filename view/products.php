@@ -6,7 +6,7 @@
 
 <button type="button" onclick="LoginController.logout()">Abmelden</button>
 
-<button id="create-product-button" type="button" onclick="window.location.href = '/view/categories.php'">Kategorien öffnen</button>
+<button id="open-categories-button" type="button" onclick="window.location.href = '/view/categories.php'">Kategorien öffnen</button>
 
 <table border="1" cellspacing="0" cellpadding="5" class="product-table">
     <thead>
