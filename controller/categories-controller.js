@@ -23,7 +23,7 @@ class CategoriesController {
     /**
      * Öffnet die Kategorie, deren ID in der URL steht.
      */
-    static getProductFromPermaLink() {
+    static getCategoryFromPermalink() {
         const categoryId = new URLSearchParams(window.location.search).get("id");
 
         if (categoryId) {
@@ -46,10 +46,10 @@ class CategoriesController {
                 const categories = await response.json();
                 CategoriesController.loadTable(categories);
             } else {
-                console.error("Could not load products: ", response.status);
+                console.error("Kategorien konnten nicht geladen werden:", response.status);
             }
         } catch (error) {
-            console.error("Could not load products: ", error.message);
+            console.error("Kategorien konnten nicht geladen werden:", error.message);
         } finally {
             LoadingCursor.stop();
         }
@@ -96,7 +96,7 @@ class CategoriesController {
             // Aktualisiert die Adressleiste, ohne die Seite neu zu laden.
             categoryLink.onclick = () => {
                 history.replaceState(null, "", categoryLink.href);
-                CategoriesController.getProductFromPermaLink();
+                CategoriesController.getCategoryFromPermalink();
                 return false;
             };
 
@@ -130,9 +130,9 @@ class CategoriesController {
                 alert("Bitte erneut anmelden");
                 window.location.href = "/index.php";
             } else if (response.status === 500) {
-                console.error("Could not create or update category");
+                console.error("Kategorie konnte nicht geladen werden.");
             } else if (response.status === 404) {
-                alert("Category not Found");
+                alert("Kategorie nicht gefunden.");
                 await this.getAllCategories();
             } else if (response.ok) {
                 const category = await response.json();
@@ -150,10 +150,10 @@ class CategoriesController {
                 dialog.querySelector("h2").textContent = "Kategorie bearbeiten";
                 dialog.showModal();
             } else {
-                console.error("Could not load product or categories:", response.status);
+                console.error("Kategorie konnte nicht geladen werden:", response.status);
             }
         } catch (error) {
-            console.error("Could not load product or categories:", error.message);
+            console.error("Kategorie konnte nicht geladen werden:", error.message);
         } finally {
             LoadingCursor.stop();
         }
@@ -176,21 +176,21 @@ class CategoriesController {
                 alert("Bitte erneut anmelden");
                 window.location.href = "/index.php";
             } else if (response.status === 404) {
-                alert("Category not Found");
+                alert("Kategorie nicht gefunden.");
                 await CategoriesController.getAllCategories();
             } else if (response.status === 204) {
-                alert("Erfolreich updatet");
+                alert("Kategorie wurde aktualisiert.");
 
                 document.querySelector("#create-or-update-category-dialog").close();
                 await CategoriesController.getAllCategories();
             } else if (response.status === 400) {
                 const errorData = await response.json();
-                alert("Falsche validation: " + errorData.error_message);
+                alert("Ungültige Eingabe: " + errorData.error_message);
             } else {
-                console.error("Could not create or update product: ", response.status);
+                console.error("Kategorie konnte nicht aktualisiert werden:", response.status);
             }
         } catch (error) {
-            console.error("Could not load products: ", error.message);
+            console.error("Kategorie konnte nicht aktualisiert werden:", error.message);
         } finally {
             LoadingCursor.stop();
         }
@@ -212,18 +212,18 @@ class CategoriesController {
                 alert("Bitte erneut anmelden");
                 window.location.href = "/index.php";
             } else if (response.status === 201) {
-                alert("Erfolreich erstellt");
+                alert("Kategorie wurde erstellt.");
 
                 document.querySelector("#create-or-update-category-dialog").close();
                 await CategoriesController.getAllCategories();
             } else if (response.status === 400) {
                 const errorData = await response.json();
-                alert("Falsche validation: " + errorData.error_message);
+                alert("Ungültige Eingabe: " + errorData.error_message);
             } else {
-                console.error("Could not create or update product: ", response.status);
+                console.error("Kategorie konnte nicht erstellt werden:", response.status);
             }
         } catch (error) {
-            console.error("Could not load products: ", error.message);
+            console.error("Kategorie konnte nicht erstellt werden:", error.message);
         } finally {
             LoadingCursor.stop();
         }
@@ -240,18 +240,18 @@ class CategoriesController {
                 const response = await ApiModel.deleteCategory(category_id);
 
                 if (response.ok) {
-                    alert("Erfolgreich gelöscht");
+                    alert("Kategorie wurde gelöscht.");
                     await CategoriesController.getAllCategories();
                 } else if (response.status === 401) {
                     alert("Bitte erneut anmelden");
                     window.location.href = "/index.php";
                 } else if (response.status === 404) {
-                    alert("Category wurde nicht gefunden");
+                    alert("Kategorie nicht gefunden.");
                 } else {
-                    console.error("Could not create or update product: ", response.status);
+                    console.error("Kategorie konnte nicht gelöscht werden:", response.status);
                 }
             } catch (error) {
-                console.error("Could not load products: ", error.message);
+                console.error("Kategorie konnte nicht gelöscht werden:", error.message);
             } finally {
                 LoadingCursor.stop();
             }
@@ -260,4 +260,4 @@ class CategoriesController {
 }
 
 CategoriesController.getAllCategories();
-CategoriesController.getProductFromPermaLink();
+CategoriesController.getCategoryFromPermalink();
