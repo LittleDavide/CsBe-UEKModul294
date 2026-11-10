@@ -30,12 +30,12 @@
 <dialog id="create-or-update-product-dialog">
     <h2>Produkt erstellen</h2>
 
-    <form id="product-form" onsubmit="CategoriesController.onSubmit(event)">
+    <form id="product-form" onsubmit="ProductsController.onSubmit(event)">
         <label for="product-sku">Artikelnummer (SKU)</label><br>
-        <input id="product-sku" name="sku" type="text" required><br>
+        <input id="product-sku" name="sku" type="text" maxlength="100" placeholder="z. B. ABC-123" required><br>
 
         <label for="product-name">Produktname</label><br>
-        <input id="product-name" name="name" type="text" required><br>
+        <input id="product-name" name="name" type="text" maxlength="500" placeholder="z. B. Mineralwasser" required><br>
 
         <label for="product-category">Kategorie</label><br>
         <!-- Der Controller ergänzt die Kategorien beim Öffnen des Dialogs. -->
@@ -44,16 +44,16 @@
         </select><br>
 
         <label for="product-image">Bild-URL</label><br>
-        <input id="product-image" name="image" type="url" required><br>
+        <input id="product-image" name="image" type="url" maxlength="1000" placeholder="https://example.com/produkt.jpg" required><br>
 
         <label for="product-description">Beschreibung</label><br>
-        <textarea id="product-description" name="description" required></textarea><br>
+        <textarea id="product-description" name="description" maxlength="65535" placeholder="Produkt kurz beschreiben" required></textarea><br>
 
         <label for="product-price">Preis (CHF)</label><br>
-        <input id="product-price" name="price" type="number" min="0" step="0.01" required><br>
+        <input id="product-price" name="price" type="number" min="0" max="999999999999999999999999999999999999999999999999999999999999999.99" step="0.01" placeholder="z. B. 9.95" required><br>
 
         <label for="product-stock">Bestand</label><br>
-        <input id="product-stock" name="stock" type="number" min="0" step="1" required><br>
+        <input id="product-stock" name="stock" type="number" min="0" max="2147483647" step="1" placeholder="z. B. 10" required><br>
 
         <input id="product-active" name="active" type="checkbox" checked>
         <label for="product-active">Aktiv</label><br><br>

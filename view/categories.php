@@ -29,10 +29,10 @@
 
     <form id="category-form" onsubmit="CategoriesController.onSubmit(event)">
         <label for="category-id">Kategorie-ID</label><br>
-        <input id="category-id" name="category_id" type="text" readonly><br>
+        <input id="category-id" name="category_id" type="text" placeholder="Wird automatisch vergeben" readonly><br>
 
         <label for="category-name">Name</label><br>
-        <input id="category-name" name="name" type="text" required><br>
+        <input id="category-name" name="name" type="text" maxlength="500" placeholder="z. B. Getränke" required><br>
 
         <input id="category-active" name="active" type="checkbox" checked>
         <label for="category-active">Aktiv</label><br><br>
