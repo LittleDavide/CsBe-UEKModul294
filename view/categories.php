@@ -4,6 +4,8 @@
 
 <h1>Produkte</h1>
 
+<button type="button" onclick="LoginController.logout()">Abmelden</button>
+
 <table border="1" cellspacing="0" cellpadding="5" class="category-table">
     <thead>
         <tr>

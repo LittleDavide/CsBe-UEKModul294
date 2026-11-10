@@ -24,7 +24,7 @@ class ApiModel {
      * @returns {Promise<Response>} Die HTTP-Antwort der API.
      */
     static sendLogout() {
-        return fetch("https://campus.csbe.ch./uek294/api/v1/unauthenticate", {
+        return fetch("https://campus.csbe.ch/uek294/api/v1/unauthenticate", {
             method: "POST",
             credentials: "include"
         });

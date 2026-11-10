@@ -1,5 +1,5 @@
 /**
- * Verarbeitet die Anmeldung und öffnet nach Erfolg die Produktseite.
+ * Steuert die Anmeldung, die Abmeldung und die Weiterleitung.
  */
 class LoginController {
   /**
@@ -48,5 +48,22 @@ class LoginController {
    */
   static loginSuccessfully() {
     window.location.href = "/view/products.php";
+  }
+
+  /**
+   * Ruft die Abmeldung bei der API auf und öffnet danach die Anmeldung.
+   */
+  static async logout() {
+    try {
+      const response = await ApiModel.sendLogout();
+
+      if (!response.ok) {
+        console.error("Abmeldung fehlgeschlagen:", response.status);
+      }
+    } catch (error) {
+      console.error("Abmeldung fehlgeschlagen:", error.message);
+    } finally {
+      window.location.href = "/index.php";
+    }
   }
 }
