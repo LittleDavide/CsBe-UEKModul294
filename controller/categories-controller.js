@@ -123,7 +123,7 @@ class CategoriesController {
                 dialog.querySelector("h2").textContent = "Produkt bearbeiten";
                 dialog.showModal();
             } else {
-                console.error("Could not load product or categories:", response.status, categoriesResponse.status);
+                console.error("Could not load product or categories:", response.status);
             }
         } catch (error) {
             console.error("Could not load product or categories:", error.message);
@@ -212,3 +212,4 @@ class CategoriesController {
 }
 
 CategoriesController.getAllCategories();
+CategoriesController.getProductFromPermaLink();
