@@ -6,10 +6,12 @@ body {
   color: black;
 }
 
+/* Zeigt während der Anmeldung einen Fortschrittscursor. */
 body.loading {
   cursor: progress;
 }
 
+/* Verkleinert die Schrift innerhalb der Produktliste. */
 .product-table {
     font-size: 12px;
 }

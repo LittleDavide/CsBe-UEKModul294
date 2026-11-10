@@ -1,9 +1,19 @@
+/**
+ * Steuert die Produktliste und die Dialoge zum Erstellen und Bearbeiten.
+ */
 class ProductsController {
+    /**
+     * Startet das Speichern des Produktformulars.
+     * @param {SubmitEvent} event Das Absendeereignis des Formulars.
+     */
     static onSubmit(event) {
         event.preventDefault();
         ProductsController.createOrUpdateProduct();
     }
 
+    /**
+     * Öffnet das Produkt, dessen SKU in der URL steht.
+     */
     static getProductFromPermaLink() {
         const sku = new URLSearchParams(window.location.search).get("sku");
 
@@ -12,6 +22,9 @@ class ProductsController {
         }
     }
 
+    /**
+     * Lädt die Produkte von der API und aktualisiert die Tabelle.
+     */
     static async getAllProducts() {
         try {
             let response = await ApiModel.getProducts();
@@ -30,10 +43,14 @@ class ProductsController {
         }
     }
 
+    /**
+     * Erstellt die Tabellenzeilen mit Aktionen und Permalinks.
+     * @param {object[]} products Die anzuzeigenden Produkte.
+     */
     static loadTable(products) {
         const productList = document.querySelector("#product-list");
 
-        //cleared productList
+        // Entfernt alte Zeilen, damit die Liste beim Nachladen keine Duplikate enthält.
         productList.replaceChildren();
 
         for (let product of products) {
@@ -45,7 +62,7 @@ class ProductsController {
             row.insertCell().textContent = product.price;
             row.insertCell().textContent = product.stock;
 
-            // Bearbeitungs Button und Löschen Button
+            // Bündelt die Aktionen für das jeweilige Produkt in einer Zelle.
             const actionCell = row.insertCell();
 
             const editButton = document.createElement("button");
@@ -53,7 +70,7 @@ class ProductsController {
             editButton.textContent = "Bearbeiten";
             editButton.onclick = () => ProductsController.openUpdateProductDialog(product.sku);
 
-            // confs für delete button
+            // Der Löschbutton übergibt die SKU aus dieser Zeile.
             const deleteButton = document.createElement("button");
             deleteButton.type = "button";
             deleteButton.textContent = "Löschen";
@@ -61,12 +78,12 @@ class ProductsController {
 
             actionCell.append(editButton, " ", deleteButton);
 
-            //create Permalink for each product
+            // Die SKU in der URL macht das Produkt direkt aufrufbar.
             const productLink = document.createElement("a");
             productLink.textContent = "Produkt Detail öffnen";
             productLink.href = "/view/products.php?sku=" + encodeURIComponent(product.sku);
 
-            // prevent reload and add link to URL
+            // Aktualisiert die Adressleiste, ohne die Seite neu zu laden.
             productLink.onclick = () => {
                 history.replaceState(null, "", productLink.href);
                 ProductsController.getProductFromPermaLink();
@@ -78,6 +95,10 @@ class ProductsController {
         }
     }
 
+    /**
+     * Fragt vor dem Löschen nach und lädt die Liste nach Erfolg neu.
+     * @param {string} sku Die Artikelnummer des Produkts.
+     */
     static async handleDelete(sku) {
         if (confirm("Produkt wirklich löschen? " + sku)) {
             try {
@@ -100,6 +121,10 @@ class ProductsController {
         }
     }
 
+    /**
+     * Lädt Produkt und Kategorien und füllt das Bearbeitungsformular.
+     * @param {string} sku Die Artikelnummer des Produkts.
+     */
     static async openUpdateProductDialog(sku) {
         try {
             const productResponse = await ApiModel.getProduct(sku);
@@ -117,9 +142,9 @@ class ProductsController {
                 const product = await productResponse.json();
                 const categories = await categoriesResponse.json();
 
-                // holt die einzelne elemente
+                // Greift über die Feldnamen auf das gemeinsame Produktformular zu.
                 const fields = document.querySelector("#product-form").elements;
-                // leert den Options auswahl von category
+                // Entfernt die Kategorien der vorherigen Dialogöffnung.
                 fields.id_category.replaceChildren();
 
                 for (const category of categories) {
@@ -136,7 +161,7 @@ class ProductsController {
                 fields.price.value = product.price;
                 fields.stock.value = product.stock;
 
-                // prüft obs aktiv ist oder nicht 
+                // Die API liefert den Aktivstatus als 0 oder 1.
                 fields.active.checked = Number(product.active) === 1;
 
                 const dialog = document.querySelector("#create-or-update-product-dialog");
@@ -151,8 +176,11 @@ class ProductsController {
     }
 
 
+    /**
+     * Lädt die Kategorien und öffnet ein leeres Produktformular.
+     */
     static async openCreateProductDialog() {
-        // open Dialog view with loaded categories for the dropdown menü
+        // Lädt die Kategorien vor dem Öffnen des Dialogs.
         try {
             const response = await ApiModel.getCategories();
 
@@ -160,7 +188,7 @@ class ProductsController {
                 const categories = await response.json();
                 const categorySelect = document.querySelector("#product-category");
 
-                // cleared the options for take down dupplicates for each new loading
+                // Setzt die Auswahl zurück und verhindert doppelte Einträge.
                 categorySelect.replaceChildren(new Option("Bitte Kategorie wählen", ""));
 
                 for (const category of categories) {
@@ -170,7 +198,7 @@ class ProductsController {
                 const form = document.querySelector("#product-form");
                 const dialog = document.querySelector("#create-or-update-product-dialog");
 
-                // Reset den Form und setzt die benötigte Titeln und Regeln richtig
+                // Setzt Formular und SKU-Feld nach einer Bearbeitung zurück.
                 form.reset();
                 form.elements.sku.readOnly = false;
                 dialog.querySelector("h2").textContent = "Produkt erstellen";
@@ -186,6 +214,9 @@ class ProductsController {
         }
     }
 
+    /**
+     * Übermittelt die Formularwerte und aktualisiert die Liste nach dem Speichern.
+     */
     static async createOrUpdateProduct() {
         const sku = document.querySelector("#product-sku").value;
         const name = document.querySelector("#product-name").value;
@@ -194,7 +225,7 @@ class ProductsController {
         const description = document.querySelector("#product-description").value;
         const price = Number(document.querySelector("#product-price").value);
         const stock = Number(document.querySelector("#product-stock").value);
-        // 1 = active / 0 = deactive
+        // Sendet den Zustand der Checkbox als Zahl an die API.
         const active = document.querySelector("#product-active").checked ? 1 : 0;
 
         try {

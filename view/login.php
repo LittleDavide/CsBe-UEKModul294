@@ -1,4 +1,5 @@
 <h1>Anmeldung</h1>
+<!-- Der Login-Controller sendet die Zugangsdaten beim Absenden an die API. -->
 <form id="login-form" onsubmit="LoginController.onSubmit(event)">
     <label>Benutzername: </label><br>
     <input required id="username" name="username" type="text" placeholder="Benutzername"><br>

@@ -15,11 +15,13 @@
             <th scope="col">Aktionen</th>
         </tr>
     </thead>
+    <!-- Der Produkt-Controller füllt die Tabellenzeilen mit den geladenen Produkten. -->
     <tbody id="product-list"></tbody>
 </table>
 <br>
 <button id="create-product-button" type="button" onclick="ProductsController.openCreateProductDialog()">Neuen Produkt erstellen</button>
 
+<!-- Gemeinsames Formular für neue und bestehende Produkte. -->
 <dialog id="create-or-update-product-dialog">
     <h2>Produkt erstellen</h2>
 
@@ -31,6 +33,7 @@
         <input id="product-name" name="name" type="text" required><br>
 
         <label for="product-category">Kategorie</label><br>
+        <!-- Der Controller ergänzt die Kategorien beim Öffnen des Dialogs. -->
         <select id="product-category" name="id_category" required>
             <option value="">Bitte Kategorie wählen</option>
         </select><br>
