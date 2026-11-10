@@ -4,6 +4,14 @@ class ProductsController {
         ProductsController.createOrUpdateProduct();
     }
 
+    static getProductFromPermaLink() {
+        const sku = new URLSearchParams(window.location.search).get("sku");
+
+        if (sku) {
+            ProductsController.openUpdateProductDialog(sku);
+        }
+    }
+
     static async getAllProducts() {
         try {
             let response = await ApiModel.getProducts();
@@ -52,6 +60,21 @@ class ProductsController {
             deleteButton.onclick = () => ProductsController.handleDelete(product.sku);
 
             actionCell.append(editButton, " ", deleteButton);
+
+            //create Permalink for each product
+            const productLink = document.createElement("a");
+            productLink.textContent = "Produkt Detail öffnen";
+            productLink.href = "/view/products.php?sku=" + encodeURIComponent(product.sku);
+
+            // prevent reload and add link to URL
+            productLink.onclick = () => {
+                history.replaceState(null, "", productLink.href);
+                ProductsController.getProductFromPermaLink();
+                return false;
+            };
+
+            actionCell.append(" ", productLink)
+
         }
     }
 
@@ -82,7 +105,15 @@ class ProductsController {
             const productResponse = await ApiModel.getProduct(sku);
             const categoriesResponse = await ApiModel.getCategories();
 
-            if (productResponse.ok && categoriesResponse.ok) {
+            if (productResponse.status === 401 || categoriesResponse.status === 401) {
+                alert("Bitte erneut anmelden");
+                window.location.href = "/index.php";
+            } else if (productResponse.status === 500 || categoriesResponse.status === 500) {
+                console.error("Could not create or update product: ", response.status);
+            } else if (productResponse.status === 404) {
+                alert("Product not Found");
+                await this.getAllProducts();
+            } else if (productResponse.ok && categoriesResponse.ok) {
                 const product = await productResponse.json();
                 const categories = await categoriesResponse.json();
 
@@ -111,9 +142,6 @@ class ProductsController {
                 const dialog = document.querySelector("#create-or-update-product-dialog");
                 dialog.querySelector("h2").textContent = "Produkt bearbeiten";
                 dialog.showModal();
-            } else if (productResponse.status === 401 || categoriesResponse.status === 401) {
-                alert("Bitte erneut anmelden");
-                window.location.href = "/index.php";
             } else {
                 console.error("Could not load product or categories:", productResponse.status, categoriesResponse.status);
             }
@@ -132,7 +160,7 @@ class ProductsController {
                 const categories = await response.json();
                 const categorySelect = document.querySelector("#product-category");
 
-                // neues Option objekt
+                // cleared the options for take down dupplicates for each new loading
                 categorySelect.replaceChildren(new Option("Bitte Kategorie wählen", ""));
 
                 for (const category of categories) {
@@ -198,3 +226,4 @@ class ProductsController {
 }
 
 ProductsController.getAllProducts();
+ProductsController.getProductFromPermaLink();
