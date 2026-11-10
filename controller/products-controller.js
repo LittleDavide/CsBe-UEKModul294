@@ -109,7 +109,7 @@ class ProductsController {
                 alert("Bitte erneut anmelden");
                 window.location.href = "/index.php";
             } else if (productResponse.status === 500 || categoriesResponse.status === 500) {
-                console.error("Could not create or update product: ", response.status);
+                console.error("Could not create or update product");
             } else if (productResponse.status === 404) {
                 alert("Product not Found");
                 await this.getAllProducts();
