@@ -2,9 +2,10 @@
 <?php $page_controller_path = "/controller/categories-controller.js"; ?>
 <?php require "blocks/header.php"; ?>
 
-<h1>Produkte</h1>
+<h1>Categories</h1>
 
 <button type="button" onclick="LoginController.logout()">Abmelden</button>
+<button type="button" onclick="window.location.href = '/view/products.php'">Zurück zu Produkten</button>
 
 <table border="1" cellspacing="0" cellpadding="5" class="category-table">
     <thead>
