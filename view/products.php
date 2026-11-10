@@ -4,6 +4,8 @@
 
 <h1>Produkte</h1>
 
+<button id="create-product-button" type="button" onclick="window.location.href = '/view/categories.php'">Kategorien öffnen</button>
+
 <table border="1" cellspacing="0" cellpadding="5" class="product-table">
     <thead>
         <tr>
@@ -21,11 +23,12 @@
 <br>
 <button id="create-product-button" type="button" onclick="ProductsController.openCreateProductDialog()">Neuen Produkt erstellen</button>
 
+
 <!-- Gemeinsames Formular für neue und bestehende Produkte. -->
 <dialog id="create-or-update-product-dialog">
     <h2>Produkt erstellen</h2>
 
-    <form id="product-form" onsubmit="ProductsController.onSubmit(event)">
+    <form id="product-form" onsubmit="CategoriesController.onSubmit(event)">
         <label for="product-sku">Artikelnummer (SKU)</label><br>
         <input id="product-sku" name="sku" type="text" required><br>
 
